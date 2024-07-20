@@ -24,10 +24,10 @@ pipeline {
         always {
             junit testResults: '**/target/surefire-reports/TEST-*.xml'   // publishes test results
             recordIssues enabledForFailure: true, tools: [mavenConsole(), java(), javaDoc()]  // record warnings and errors from maven console 
-            recordIssues enabledForFailure: true, tool: checkStyle()  // record code style violations
-            recordIssues enabledForFailure: true, tool: spotBugs(pattern: '**/target/findbugsXml.xml') // record potential bugs
-            recordIssues enabledForFailure: true, tool: cpd(pattern: '**/target/cpd.xml') // record code duplication reported by CPD
-            recordIssues enabledForFailure: true, tool: pmdParser(pattern: '**/target/pmd.xml')  // record potential coding problems by PMD
+            recordIssues enabledForFailure: true, tools: checkStyle()  // record code style violations
+            recordIssues enabledForFailure: true, tools: spotBugs(pattern: '**/target/findbugsXml.xml') // record potential bugs
+            recordIssues enabledForFailure: true, tools: cpd(pattern: '**/target/cpd.xml') // record code duplication reported by CPD
+            recordIssues enabledForFailure: true, tools: pmdParser(pattern: '**/target/pmd.xml')  // record potential coding problems by PMD
         }
     }
 }
