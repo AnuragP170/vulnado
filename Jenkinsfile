@@ -3,10 +3,10 @@ pipeline {
     stages {
         stage ('Checkout') {
             steps {
-                git branch:'master', url: 'https://github.com/ScaleSec/vulnado.git'
+                git branch: 'master', url: 'https://github.com/AnuragP170/vulnado.git'
             }
         }
-        
+
         stage ('Build') {
             steps {
                 sh '/var/jenkins_home/apache-maven-3.9.8/bin/mvn --batch-mode -V -U -e clean verify -Dsurefire.useFile=false -Dmaven.test.failure.ignore'
@@ -22,12 +22,12 @@ pipeline {
 
     post {
         always {
-            junit testResults: '**/target/surefire-reports/TEST-*.xml'
-            recordIssues enabledForFailure: true, tools: [mavenConsole(), java(), javaDoc()]
-            recordIssues enabledForFailure: true, tool: checkStyle()
-            recordIssues enabledForFailure: true, tool: spotBugs(pattern: '**/target/findbugsXml.xml')
-            recordIssues enabledForFailure: true, tool: cpd(pattern: '**/target/cpd.xml')
-            recordIssues enabledForFailure: true, tool: pmdParser(pattern: '**/target/pmd.xml')
+            junit testResults: '**/target/surefire-reports/TEST-*.xml'   // publishes test results
+            recordIssues enabledForFailure: true, tools: [mavenConsole(), java(), javaDoc()]  // record warnings and errors from maven console 
+            recordIssues enabledForFailure: true, tools: [checkStyle(pattern: '**/target/checkstyle-result.xml')]  // record code style violations
+            recordIssues enabledForFailure: true, tools: [spotBugs(pattern: '**/target/findbugsXml.xml')]  // record potential bugs
+            recordIssues enabledForFailure: true, tools: [cpd(pattern: '**/target/cpd.xml')]  // record code duplication reported by CPD
+            recordIssues enabledForFailure: true, tools: [pmdParser(pattern: '**/target/pmd.xml')]  // record potential coding problems by PMD
         }
     }
 }
